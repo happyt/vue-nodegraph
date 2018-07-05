@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" type="text/css" href="test.css">
+  <title>Document</title>
+</head>
+<body>
+  <div id="header">Editor Fragment</div>
+  <div id="diag"></div>
+</body>
+<script src="XG5.js"></script>
+<script src="createGraph.js"></script>
+
+<script type="text/javascript">
+  function doStuff(){
+    
+    console.log("do stuff...")
+    var wait = false;
+    // if (window.XG5 === undefined) wait = true;
+    // else if (window.XG5.GUINode === undefined) wait = true;
+    // else if (window.rootNode === undefined) wait = true;
+    
+    // if (wait){
+    //   setTimeout(doStuff, 50);
+    //   return;
+    // }
+    var mult = new XG5.GUINode({name: 'Multiply (A*B)'});
+    mult.addInput('A');
+    mult.addInput('B');
+    
+    var clamp = new XG5.GUINode({name: 'Clamp'});
+    clamp.addInput('Min', 'input');
+    clamp.addInput('Max', 'input');
+    clamp.addInput('Value');
+    
+    var vec4 = new XG5.GUINode({name: 'Uniform vec4'});
+    vec4.addInput('Name', 'input');
+    
+    var phong = new XG5.GUINode({name: 'Phong'});
+    phong.addInput('% Amb', 'input');
+    phong.addInput('% Diff', 'input');
+    phong.addInput('% Spec', 'input');
+    phong.addInput('Ambient');
+    phong.addInput('Diffuse');
+    phong.addInput('Specular');
+    
+    var tex = new XG5.GUINode({name: 'Uniform sampler2D'});
+    tex.addInput('Name', 'input');
+    
+    tex.connectTo(phong.inputs[3]);
+    tex.connectTo(phong.inputs[4]);
+    tex.connectTo(phong.inputs[5]);
+    
+    phong.connectTo(clamp.inputs[2]);
+    
+    clamp.connectTo(mult.inputs[0]);
+    vec4.connectTo(mult.inputs[1]);
+    
+    mult.connectTo(rootNode.inputs[0]);
+    
+    mult.moveTo({x: 126, y: 120});
+    clamp.moveTo({x: 260, y: 45});
+    phong.moveTo({x: 438, y: 143});
+    vec4.moveTo({x: 439, y: 313});
+    tex.moveTo({x: 654, y: 154});
+    
+    mult.initUI();
+    clamp.initUI();
+    phong.initUI();
+    vec4.initUI();
+    tex.initUI();
+  }
+  
+  doStuff();
+  </script>
+</html>
