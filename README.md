@@ -19,3 +19,4 @@ Z = closepath
 Test with half normal and half smooth
 C S, Q T
 
+Next need click drag lines to join nodes
