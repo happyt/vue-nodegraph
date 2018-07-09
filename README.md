@@ -29,5 +29,7 @@ Just used a simple diff between coords
 
 Now have line dragging
 
-Next need to put together the overall structure of DOM elements, circle elements and lines
+Next drop to a point and get the event
+
+After need to put together the overall structure of DOM elements, circle elements and lines
 
