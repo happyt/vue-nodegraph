@@ -20,3 +20,14 @@ Test with half normal and half smooth
 C S, Q T
 
 Next need click drag lines to join nodes
+
+Some offsets confusing
+https://www.sarasoueidan.com/blog/svg-coordinate-systems/
+https://www.sitepoint.com/how-to-translate-from-dom-to-svg-coordinates-and-back-again/
+
+Just used a simple diff between coords
+
+Now have line dragging
+
+Next need to put together the overall structure of DOM elements, circle elements and lines
+

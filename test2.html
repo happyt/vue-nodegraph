@@ -41,7 +41,7 @@
       <label class="yy"><input type="radio" name="out"/></label>
   </span>
 </div>
-   <svg width="800" height="640" stroke="cyan" fill="transparent">
+   <svg id="mySVG" width="800" height="640" stroke="cyan" fill="transparent">
       <circle cx="10" cy="10" r="8"  />
       <circle cx="50" cy="10" r="8"  />
       <circle cx="100" cy="20" r="8"  />
@@ -56,16 +56,27 @@
       <path id="xyz" d="M400 10 Q 500 10 500 110 T 600 210" stroke="green" stroke-width="3" fill="transparent"/>
       <circle id="p3" cx="400" cy="200" r="8" stroke="red" stroke-width="3"/>
       <circle id="p4" cx="600" cy="400" r="8" stroke="red" stroke-width="3"/>
+      <circle id="p5" cx="200" cy="400" r="8" stroke="red" fill="#ffffff" fill-opacity="0.3" stroke-width="3"/>
+      <circle id="p6" cx="240" cy="400" r="8" stroke="red" fill="#ffffff" fill-opacity="0.3" stroke-width="3"/>
       <path id="aaa" d="M400 200 Q 500 200 500 300 T 600 400" stroke="yellow" stroke-width="3" fill="transparent"/>
       <path id="bbb" d="M400 200 Q 500 200 500 300 T 600 400" stroke="chartreuse" stroke-width="3" fill="transparent"/>
+      <path id="ccc" d="M500 100 Q 600 100 600 200 T 700 300" stroke="coral" stroke-width="3" fill="transparent"/>
     </svg>
   </body>
 <script>
+  function react() {
+    alert("wow")
+  }
   //Make the DIV element draggagle:
-  var a = document.getElementById("mydiv1")
-  var b = document.getElementById("mydiv2")
+  let a = document.getElementById("mydiv1")
+  let b = document.getElementById("mydiv2")
+  let c = document.getElementById("p5")
+
+  let d = document.getElementById("ccc")
+
   dragElement(a);
   dragElement(b);
+  dragLine(c);
 
   let radius = 8
 
@@ -136,7 +147,7 @@
     y = c[1] + (c[3] - c[1])/2
     newCurve += x + " " + y + " " 
     newCurve += "T " + c[2] + " " + c[3] + " " 
-    // console.log(newCurve)
+    // console.log(obj, newCurve)
     obj.setAttribute("d", newCurve)
   }
   drawCurve(t, tCurve)
@@ -160,7 +171,7 @@ function dragElement(elmnt) {
     } else {
       elem = 2
     }
-  console.log(elmnt.id)
+    // console.log(elmnt.id)
     // get the mouse cursor position at startup:
     posX = e.clientX;
     posY = e.clientY;
@@ -205,6 +216,83 @@ function dragElement(elmnt) {
     document.onmouseup = null;
     document.onmousemove = null;
   }
+}
+
+function dragLine(spot) {
+  let line = null
+  let a = []
+  let diffX = 0
+  let diffY = 0
+  if (spot) {
+    spot.addEventListener("mousedown", dragLineMouseDown);
+  }
+
+  function dragLineMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // check if line already there
+    // if so, then clear it
+    
+    // get the start/end positions at startup:
+    posX = e.clientX;
+    posY = e.clientY;
+
+    // start dragging a line
+    // adjust for offset within the element
+    // let rect = spot.getBoundingClientRect();
+    // let svg = document.getElementById('mySVG')
+    // var pt = svg.createSVGPoint()
+    // pt.x = rect.x
+    // pt.y = rect.y
+    // let spotPt = pt.matrixTransform(svg.getScreenCTM().inverse())
+    let bb = spot.getBBox()
+    
+    diffX = bb.x - posX;    // translate svg coords to dom coords
+    diffY = bb.y - posY;
+
+   // console.log("rect", spotPt, posX, posY, spot.getBBox(), rect, spot.getBoundingClientRect())
+    startX = bb.x + bb.width/2
+    startY = bb.y + bb.height/2
+
+    line = addLine(spot)    // add default line
+    document.onmouseup = closeLineDrag;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementLineDrag;
+  }
+  function elementLineDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    posX = e.clientX;
+    posY = e.clientY;
+    endX = posX + diffX + 8
+    endY = posY + diffY + 8
+
+    // if > 10, draw line
+    if (line) {
+      let a = [ startX, startY, endX, endY ]
+      console.log(a)
+      drawQCurve(d, a)
+    }
+  }
+  function closeLineDrag () {
+    // if have made a connection, create line
+    line = null
+    document.onmouseup = null;
+    document.onmousemove = null;
+  } 
+    
+}
+
+function addLine(elem) {
+  let pathLine = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  pathLine.setAttribute('d','M 100 100 L 100 300' )
+  // pathEl.style.stroke = 'rgb('+(_reg)+',0,0)';
+  // pathEl.style.strokeWidth = '1';
+  // pathEl.style.fill = '#044B94';
+  // pathEl.style.fillOpacity="0.4";
+  elem.append(pathLine)
+  return pathLine
 }
 </script>
 </html>
