@@ -70,13 +70,15 @@
   //Make the DIV element draggagle:
   let a = document.getElementById("mydiv1")
   let b = document.getElementById("mydiv2")
-  let c = document.getElementById("p5")
+  let p5 = document.getElementById("p5")
+  let p6 = document.getElementById("p6")
 
   let d = document.getElementById("ccc")
 
   dragElement(a);
   dragElement(b);
-  dragLine(c);
+  dragLine(p5);
+  dragLine(p6);
 
   let radius = 8
 
@@ -225,6 +227,7 @@ function dragLine(spot) {
   let diffY = 0
   if (spot) {
     spot.addEventListener("mousedown", dragLineMouseDown);
+    spot.addEventListener("mouseup", checkHere);
   }
 
   function dragLineMouseDown(e) {
@@ -293,6 +296,10 @@ function addLine(elem) {
   // pathEl.style.fillOpacity="0.4";
   elem.append(pathLine)
   return pathLine
+}
+
+function checkHere() {
+  alert("Here")
 }
 </script>
 </html>
